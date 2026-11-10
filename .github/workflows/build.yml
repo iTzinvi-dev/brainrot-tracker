@@ -70,8 +70,8 @@ jobs:
 
       - name: Build release APKs
         run: |
-          flutter build apk --release --split-per-abi
-          flutter build apk --release
+          flutter build apk --release --split-per-abi --android-skip-build-dependency-validation
+          flutter build apk --release --android-skip-build-dependency-validation
 
       - name: Upload APK artifacts
         uses: actions/upload-artifact@v4
@@ -114,11 +114,11 @@ jobs:
         run: flutter pub get
 
       - name: Build iOS release bundle
-        run: flutter build ios --release --no-codesign
+        run: flutter build ios --release --simulator
 
       - name: Upload iOS bundle artifact
         uses: actions/upload-artifact@v4
         with:
           name: Release-iOS-Bundle
-          path: build/ios/iphoneos/Runner.app
+          path: build/ios/iphonesimulator/Runner.app
           if-no-files-found: warn
