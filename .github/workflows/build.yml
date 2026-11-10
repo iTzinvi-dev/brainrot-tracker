@@ -1,0 +1,124 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    name: Build Android APKs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Safe native Android folder generation
+        run: |
+          if [ ! -d "android" ]; then
+            echo "Native android directory not found. Generating safely..."
+            mkdir -p /tmp/backup_flutter
+            [ -f pubspec.yaml ] && cp pubspec.yaml /tmp/backup_flutter/
+            [ -d lib ] && cp -r lib /tmp/backup_flutter/
+            [ -d assets ] && cp -r assets /tmp/backup_flutter/
+            flutter create --platforms=android,ios --org com.app.premium .
+            [ -f /tmp/backup_flutter/pubspec.yaml ] && cp /tmp/backup_flutter/pubspec.yaml ./
+            [ -d /tmp/backup_flutter/lib ] && cp -r /tmp/backup_flutter/lib ./
+            [ -d /tmp/backup_flutter/assets ] && cp -r /tmp/backup_flutter/assets ./
+            rm -rf /tmp/backup_flutter
+          else
+            echo "Native android directory already exists."
+          fi
+
+      - name: Inject Android Manifest Permissions
+        run: |
+          MANIFEST="android/app/src/main/AndroidManifest.xml"
+          if [ -f "$MANIFEST" ]; then
+            echo "Checking Android Manifest permissions..."
+            if ! grep -q "android.permission.INTERNET" "$MANIFEST"; then
+              echo "Injecting INTERNET permission..."
+              sed -i '/<application/i \    <uses-permission android:name="android.permission.INTERNET" />' "$MANIFEST"
+            else
+              echo "INTERNET permission already present."
+            fi
+            if ! grep -q "android.permission.VIBRATE" "$MANIFEST"; then
+              echo "Injecting VIBRATE permission..."
+              sed -i '/<application/i \    <uses-permission android:name="android.permission.VIBRATE" />' "$MANIFEST"
+            else
+              echo "VIBRATE permission already present."
+            fi
+          else
+            echo "Warning: AndroidManifest.xml not found at $MANIFEST"
+          fi
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build release APKs
+        run: |
+          flutter build apk --release --split-per-abi
+          flutter build apk --release
+
+      - name: Upload APK artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Release-APKs
+          path: build/app/outputs/flutter-apk/*.apk
+          if-no-files-found: error
+
+  build-ios:
+    name: Build iOS Bundle
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Safe native iOS folder generation
+        run: |
+          if [ ! -d "ios" ]; then
+            echo "Native ios directory not found. Generating safely..."
+            mkdir -p /tmp/backup_flutter_ios
+            [ -f pubspec.yaml ] && cp pubspec.yaml /tmp/backup_flutter_ios/
+            [ -d lib ] && cp -r lib /tmp/backup_flutter_ios/
+            [ -d assets ] && cp -r assets /tmp/backup_flutter_ios/
+            flutter create --platforms=android,ios --org com.app.premium .
+            [ -f /tmp/backup_flutter_ios/pubspec.yaml ] && cp /tmp/backup_flutter_ios/pubspec.yaml ./
+            [ -d /tmp/backup_flutter_ios/lib ] && cp -r /tmp/backup_flutter_ios/lib ./
+            [ -d /tmp/backup_flutter_ios/assets ] && cp -r /tmp/backup_flutter_ios/assets ./
+            rm -rf /tmp/backup_flutter_ios
+          else
+            echo "Native ios directory already exists."
+          fi
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build iOS release bundle
+        run: flutter build ios --release --no-codesign
+
+      - name: Upload iOS bundle artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Release-iOS-Bundle
+          path: build/ios/iphoneos/Runner.app
+          if-no-files-found: warn

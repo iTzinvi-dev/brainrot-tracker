@@ -1,0 +1,13 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "daily_stats",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "date", "order": "ASCENDING" },
+        { "fieldPath": "totalSwipes", "order": "ASCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

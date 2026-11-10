@@ -1,0 +1,46 @@
+# Flutter / Dart build directories
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Android build outputs
+android/app/build/
+android/.gradle/
+android/local.properties
+android/captures/
+android/gradlew
+android/gradlew.bat
+
+# Environment & Credentials (KEEP SECRET)
+.env
+*.keystore
+*.jks
+
+# IDE & Editor caches
+.idea/
+*.iml
+.vscode/
+
+# iOS ephemeral / build files
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/app.flx
+ios/Flutter/flutter_assets/
+ios/ServiceDefinitions.json
+ios/Runner/GeneratedPluginRegistrant.*
+
+# Exceptions: Explicitly track CI workflows and lib
+!.github/workflows/
+!lib/
+
+# Agent directories
+.agent/
+.agents/
+
+# System files
+.DS_Store
+Thumbs.db

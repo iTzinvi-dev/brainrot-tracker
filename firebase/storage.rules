@@ -1,0 +1,24 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Default Deny: Reject all unauthenticated access and unknown buckets
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+
+    // User profile pictures and private storage:
+    // Only authenticated users can read, and only the owner can upload, update, or delete.
+    // Uploads and updates must be images under 5MB.
+    // Delete operations are permitted for the authenticated owner without inspecting request.resource (null on delete).
+    match /users/{userId}/{allPaths=**} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null 
+                           && request.auth.uid == userId 
+                           && request.resource.size < 5 * 1024 * 1024 
+                           && request.resource.contentType.matches('image/.*');
+      allow delete: if request.auth != null 
+                    && request.auth.uid == userId;
+    }
+  }
+}

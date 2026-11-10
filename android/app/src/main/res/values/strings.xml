@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Brainrot Tracker Pro</string>
+    <string name="accessibility_service_description">Tracks swipes on short-form video feeds (Instagram Reels, YouTube Shorts, and TikTok) with zero-tree-traversal and displays the floating rotting brain counter without reading screen text or captions.</string>
+</resources>
