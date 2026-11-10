@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "123456789012",
-    "project_id": "brainrot-tracker-pro",
-    "storage_bucket": "brainrot-tracker-pro.appspot.com"
+    "project_number": "1013091064856",
+    "firebase_url": "https://brainrot-tracker-ed875-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "brainrot-tracker-ed875",
+    "storage_bucket": "brainrot-tracker-ed875.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:123456789012:android:abcdef0123456789abcdef",
+        "mobilesdk_app_id": "1:1013091064856:android:fc55ad520265aef488376d",
         "android_client_info": {
           "package_name": "com.brainrot.tracker"
         }
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDummyPlaceholderKeyForBrainrotTrackerPro"
+          "current_key": "AIzaSyDs5ofZJk65zoddNKHH1uyiWkp5y33mmTk"
         }
       ],
       "services": {
