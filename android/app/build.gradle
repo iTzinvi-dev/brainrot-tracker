@@ -16,9 +16,11 @@ def flutterVersionName = localProperties.getProperty('flutter.versionName') ?: "
 
 android {
     namespace "com.brainrot.tracker"
-    compileSdk 35
+    compileSdk 36
+    ndkVersion "28.2.13676358"
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
@@ -53,6 +55,8 @@ flutter {
 }
 
 dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib:2.0.21"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0"
