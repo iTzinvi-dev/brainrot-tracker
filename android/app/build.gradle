@@ -16,7 +16,7 @@ def flutterVersionName = localProperties.getProperty('flutter.versionName') ?: "
 
 android {
     namespace "com.brainrot.tracker"
-    compileSdk 34
+    compileSdk 35
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -30,7 +30,7 @@ android {
     defaultConfig {
         applicationId "com.brainrot.tracker"
         minSdk 26
-        targetSdk 34
+        targetSdk 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
