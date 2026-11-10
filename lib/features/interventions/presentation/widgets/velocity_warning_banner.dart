@@ -7,12 +7,13 @@ class VelocityWarningBanner extends StatelessWidget {
   final VoidCallback onBreathePressed;
   final VoidCallback? onDismiss;
 
-  const VelocityWarningBanner({
+  VelocityWarningBanner({
     super.key,
     required this.currentVelocity,
-    required this.onBreathePressed,
+    VoidCallback? onBreathePressed,
+    VoidCallback? onTakePause,
     this.onDismiss,
-  });
+  }) : onBreathePressed = onBreathePressed ?? onTakePause ?? (() {});
 
   @override
   Widget build(BuildContext context) {

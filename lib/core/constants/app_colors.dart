@@ -20,6 +20,7 @@ class AppColors {
 
   // Status & Health
   static const Color healthFresh = Color(0xFF10B981);
+  static const Color healthSuccess = Color(0xFF10B981);
   static const Color healthWarning = Color(0xFFF59E0B);
   static const Color healthRotting = Color(0xFF84CC16);
   static const Color healthDanger = Color(0xFFEF4444);

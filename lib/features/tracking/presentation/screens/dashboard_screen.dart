@@ -217,7 +217,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 child: VelocityWarningBanner(
                   currentVelocity: interventionState.currentVelocity,
                   onDismiss: () => ref.read(interventionProvider.notifier).dismissVelocityWarning(),
-                  onTakePause: () {
+                  onBreathePressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => BreatheScreen(
