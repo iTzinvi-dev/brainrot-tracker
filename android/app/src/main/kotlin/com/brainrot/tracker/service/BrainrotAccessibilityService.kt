@@ -99,8 +99,8 @@ class BrainrotAccessibilityService : AccessibilityService() {
         checkDateRollover()
         todayReelCount++
         val platformKey = mapPackageToPlatform(packageName)
-        val platformCount = (platformStats[platformKey] ?: 0) + 1
-        platformStats[platformKey] = platformCount
+        val platformCount = (platformStatsMap[platformKey] ?: 0) + 1
+        platformStatsMap[platformKey] = platformCount
 
         persistState()
         overlayController.updateCount(todayReelCount)
@@ -159,9 +159,9 @@ class BrainrotAccessibilityService : AccessibilityService() {
         Companion.checkDateRollover()
         val today = currentDate
         todayReelCount = prefs.getInt("count_$today", 0)
-        platformStats["instagram"] = prefs.getInt("instagram_$today", 0)
-        platformStats["youtube"] = prefs.getInt("youtube_$today", 0)
-        platformStats["tiktok"] = prefs.getInt("tiktok_$today", 0)
+        platformStatsMap["instagram"] = prefs.getInt("instagram_$today", 0)
+        platformStatsMap["youtube"] = prefs.getInt("youtube_$today", 0)
+        platformStatsMap["tiktok"] = prefs.getInt("tiktok_$today", 0)
         val savedMode = prefs.getString(KEY_MODE, OperationalMode.BALANCED.name)
         currentMode = OperationalMode.fromString(savedMode)
         isBankingMode = prefs.getBoolean(KEY_BANKING, false)
@@ -173,9 +173,9 @@ class BrainrotAccessibilityService : AccessibilityService() {
         val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         prefs.edit()
             .putInt("count_$currentDate", todayReelCount)
-            .putInt("instagram_$currentDate", platformStats["instagram"] ?: 0)
-            .putInt("youtube_$currentDate", platformStats["youtube"] ?: 0)
-            .putInt("tiktok_$currentDate", platformStats["tiktok"] ?: 0)
+            .putInt("instagram_$currentDate", platformStatsMap["instagram"] ?: 0)
+            .putInt("youtube_$currentDate", platformStatsMap["youtube"] ?: 0)
+            .putInt("tiktok_$currentDate", platformStatsMap["tiktok"] ?: 0)
             .putString(KEY_MODE, currentMode.name)
             .putBoolean(KEY_BANKING, isBankingMode)
             .apply()
@@ -212,14 +212,14 @@ class BrainrotAccessibilityService : AccessibilityService() {
         var currentDate = ""
         var currentForegroundPackage: String? = null
         var currentMode = OperationalMode.BALANCED
-        val platformStats = mutableMapOf<String, Int>()
+        private val platformStatsMap = mutableMapOf<String, Int>()
 
         fun checkDateRollover() {
             val today = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
             if (currentDate != today) {
                 currentDate = today
                 todayReelCount = 0
-                platformStats.clear()
+                platformStatsMap.clear()
                 instance?.detectors?.values?.forEach { it.reset() }
                 instance?.persistState()
                 instance?.overlayController?.updateCount(0)
@@ -233,7 +233,7 @@ class BrainrotAccessibilityService : AccessibilityService() {
 
         fun getPlatformStats(): Map<String, Int> {
             checkDateRollover()
-            return HashMap(platformStats)
+            return HashMap(platformStatsMap)
         }
 
         fun setOperationalMode(mode: OperationalMode) {
@@ -254,7 +254,7 @@ class BrainrotAccessibilityService : AccessibilityService() {
 
         fun resetCount() {
             todayReelCount = 0
-            platformStats.clear()
+            platformStatsMap.clear()
             instance?.persistState()
             instance?.overlayController?.updateCount(0)
         }
