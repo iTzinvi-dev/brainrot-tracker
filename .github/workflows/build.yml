@@ -101,7 +101,7 @@ jobs:
             [ -f pubspec.yaml ] && cp pubspec.yaml /tmp/backup_flutter_ios/
             [ -d lib ] && cp -r lib /tmp/backup_flutter_ios/
             [ -d assets ] && cp -r assets /tmp/backup_flutter_ios/
-            flutter create --platforms=android,ios --org com.app.premium .
+            flutter create --platforms=ios --org com.app.premium .
             [ -f /tmp/backup_flutter_ios/pubspec.yaml ] && cp /tmp/backup_flutter_ios/pubspec.yaml ./
             [ -d /tmp/backup_flutter_ios/lib ] && cp -r /tmp/backup_flutter_ios/lib ./
             [ -d /tmp/backup_flutter_ios/assets ] && cp -r /tmp/backup_flutter_ios/assets ./
